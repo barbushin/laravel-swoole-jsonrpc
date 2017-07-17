@@ -1,0 +1,24 @@
+{
+    "name": "huang-yi/laravel-swoole-jsonrpc",
+    "description": "JSON-RPC server and client based on swoole, for laravel and lumen framework.",
+    "keywords": ["jsonrpc", "json-rpc", "rpc", "json", "laravel", "lumen", "swoole", "php"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Huang Yi",
+            "email": "coodeer@163.com"
+        }
+    ],
+    "require": {
+        "ext-swoole": ">=1.9.3"
+    },
+    "require-dev": {
+        "laravel/framework": "~5.1",
+        "laravel/lumen-framework": "~5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "HuangYi\\JsonRpc\\": "src"
+        }
+    }
+}
