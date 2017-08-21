@@ -1,9 +1,15 @@
 <?php
 
-namespace HuangYi\JsonRpc\Contracts;
+/*
+ * This file is part of the huang-yi/laravel-swoole-http package.
+ *
+ * (c) Huang Yi <coodeer@163.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use HuangYi\JsonRpc\Foundation\Request;
-use HuangYi\JsonRpc\Foundation\Response;
+namespace HuangYi\JsonRpc\Contracts;
 
 interface KernelContract
 {
@@ -11,11 +17,11 @@ interface KernelContract
      * @param \HuangYi\JsonRpc\Foundation\Request $request
      * @return \HuangYi\JsonRpc\Foundation\Response
      */
-    public function handle(Request $request);
+    public function handle($request);
 
     /**
      * @param \HuangYi\JsonRpc\Foundation\Request $request
      * @param \HuangYi\JsonRpc\Foundation\Response $response
      */
-    public function terminal(Request $request, Response $response);
+    public function terminate($request, $response);
 }
