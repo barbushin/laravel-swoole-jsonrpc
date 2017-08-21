@@ -653,6 +653,6 @@ class Router
 
         $this->routes = $routes;
 
-        $this->container->instance('swoole.routes', $this->routes);
+        $this->container->instance('swoole.jsonrpc.routes', $this->routes);
     }
 }
