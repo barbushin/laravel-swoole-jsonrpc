@@ -1,6 +1,7 @@
 <?php
-/**
- * Copyright
+
+/*
+ * This file is part of the huang-yi/laravel-swoole-http package.
  *
  * (c) Huang Yi <coodeer@163.com>
  *
