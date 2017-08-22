@@ -12,7 +12,7 @@
 namespace HuangYi\JsonRpc\Exceptions;
 
 use Exception;
-use HuangYi\JsonRpc\Foundation\Response;
+use HuangYi\JsonRpc\Server\Response;
 use Psr\Log\LoggerInterface;
 use Illuminate\Contracts\Container\Container;
 use HuangYi\JsonRpc\Contracts\ExceptionHandlerContract as JsonRpcExceptionHandlerContract;
@@ -97,9 +97,9 @@ class Handler implements ExceptionHandlerContract, JsonRpcExceptionHandlerContra
     /**
      * Render an exception into a response.
      *
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
+     * @param  \HuangYi\JsonRpc\Server\Request $request
      * @param  \Exception $e
-     * @return \HuangYi\JsonRpc\Foundation\Response
+     * @return \HuangYi\JsonRpc\Server\Response
      */
     public function render($request, Exception $e)
     {
