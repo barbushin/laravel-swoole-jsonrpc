@@ -30,6 +30,8 @@ class ServerServiceProvider extends JsonRpcServiceProvider
         $this->app->singleton('swoole.jsonrpc.router', function ($app) {
             return new Router($app);
         });
+
+        $this->app->alias('swoole.jsonrpc.router', Router::class);
     }
 
     /**
@@ -40,6 +42,8 @@ class ServerServiceProvider extends JsonRpcServiceProvider
         $this->app->singleton('swoole.jsonrpc', function ($app) {
             return new Manager($app);
         });
+
+        $this->app->alias('swoole.jsonrpc', Manager::class);
     }
 
     /**
