@@ -111,7 +111,11 @@ class Handler implements ExceptionHandlerContract, JsonRpcExceptionHandlerContra
             $data = $e->getData();
         }
 
-        return (new Response())->setError($code, $message, $data);
+        $response = new Response;
+
+        $response->setError($code, $message, $data);
+
+        return $response->prepare($request);
     }
 
     /**
