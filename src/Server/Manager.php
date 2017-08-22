@@ -18,6 +18,7 @@ use HuangYi\JsonRpc\Exceptions\Handler;
 use HuangYi\JsonRpc\Exceptions\InternalErrorException;
 use HuangYi\JsonRpc\Exceptions\ResponseException;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Support\Facades\Log;
 use Swoole\Server;
 
 class Manager
@@ -162,6 +163,10 @@ class Manager
      */
     public function onReceive($server, $connectionId, $reactorId, $payload)
     {
+        if ($this->container['config']['app.debug']) {
+            Log::debug(sprintf('Received request from [%s] with [%s]', $server->connection_info['remote_ip'], $payload));
+        }
+
         $kernel = $this->container->make(KernelContract::class);
 
         try {
