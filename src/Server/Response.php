@@ -186,4 +186,16 @@ class Response
 
         return $this;
     }
+
+    /**
+     * Send response to client.
+     *
+     * @param \Swoole\Server $server
+     * @param int $connectionId
+     * @return bool
+     */
+    public function send($server, $connectionId)
+    {
+        return $server->send($connectionId, $this->toJson());
+    }
 }
