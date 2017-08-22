@@ -55,7 +55,11 @@ class Request
      */
     public function setId($id = null)
     {
-        $this->id = $id ?: Uuid::uuid4()->toString();
+        if (is_null($id)) {
+            $id = Uuid::uuid4()->toString();
+        }
+
+        $this->id = $id;
 
         return $this;
     }
