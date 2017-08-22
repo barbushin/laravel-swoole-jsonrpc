@@ -65,7 +65,9 @@ class ConnectionManager
     {
         $config = $this->configuration($name);
 
-        return new Connection($config['host'], $config['port']);
+        $connection = new Connection($config['host'], $config['port']);
+
+        return $connection->;
     }
 
     /**

@@ -12,24 +12,44 @@
 namespace HuangYi\JsonRpc\Client;
 
 use HuangYi\JsonRpc\Exceptions\ConnectionException;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Support\Facades\Log;
 use Swoole\Client;
 
 class Connection
 {
+    /**
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * @var string
+     */
+    protected $port;
+
     /**
      * @var \Swoole\Client
      */
     protected $client;
 
     /**
+     * @var \Illuminate\Contracts\Container\Container
+     */
+    protected $container;
+
+    /**
      * JsonRpcClient constructor.
      *
-     * @param $host
-     * @param $port
+     * @param string $host
+     * @param string $port
      * @throws \HuangYi\JsonRpc\Exceptions\ConnectionException
      */
     public function __construct($host, $port)
     {
+        $this->host = $host;
+        $this->port = $port;
+
         $this->createSwooleClient();
         $this->connect($host, $port);
     }
@@ -99,6 +119,10 @@ class Connection
      */
     public function send($content)
     {
+        if ($this->container['config']['app.debug']) {
+            Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
+        }
+
         $this->client->send($content);
     }
 
@@ -109,7 +133,13 @@ class Connection
      */
     public function receive()
     {
-        return $this->client->recv();
+        $response = $this->client->recv();
+
+        if ($this->container['config']['app.debug']) {
+            Log::debug(sprintf('Received response \'%s\'', $response));
+        }
+
+        return $response;
     }
 
     /**
@@ -120,6 +150,17 @@ class Connection
     public function disconnect()
     {
         $this->client->close();
+
+        return $this;
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Container\Container $container
+     * @return $this
+     */
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
 
         return $this;
     }
