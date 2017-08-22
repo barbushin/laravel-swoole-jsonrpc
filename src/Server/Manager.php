@@ -165,7 +165,7 @@ class Manager
     {
         if ($this->container['config']['app.debug']) {
             $connectionInfo = $server->connection_info($connectionId);
-            Log::debug(sprintf('Received request from [%s] with [%s]', $connectionInfo['remote_ip'], $payload));
+            Log::debug(sprintf('Received request from [%s] with \'%s\'', $connectionInfo['remote_ip'], $payload));
         }
 
         $kernel = $this->container->make(KernelContract::class);
