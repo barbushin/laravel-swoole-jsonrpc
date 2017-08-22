@@ -12,8 +12,8 @@
 namespace HuangYi\JsonRpc\Routing;
 
 use Closure;
-use HuangYi\JsonRpc\Foundation\Request;
-use HuangYi\JsonRpc\Foundation\Response;
+use HuangYi\JsonRpc\Server\Request;
+use HuangYi\JsonRpc\Server\Response;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pipeline\Pipeline;
@@ -48,7 +48,7 @@ class Router
     /**
      * The request currently being dispatched.
      *
-     * @var \HuangYi\JsonRpc\Foundation\Request
+     * @var \HuangYi\JsonRpc\Server\Request
      */
     protected $currentRequest;
 
@@ -270,8 +270,8 @@ class Router
     /**
      * Dispatch the request to the application.
      *
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
-     * @return \HuangYi\JsonRpc\Foundation\Response
+     * @param  \HuangYi\JsonRpc\Server\Request $request
+     * @return \HuangYi\JsonRpc\Server\Response
      */
     public function dispatch(Request $request)
     {
@@ -283,8 +283,8 @@ class Router
     /**
      * Dispatch the request to a route and return the response.
      *
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
-     * @return \HuangYi\JsonRpc\Foundation\Response
+     * @param  \HuangYi\JsonRpc\Server\Request $request
+     * @return \HuangYi\JsonRpc\Server\Response
      */
     public function dispatchToRoute(Request $request)
     {
@@ -302,7 +302,7 @@ class Router
     /**
      * Find the route matching a given request.
      *
-     * @param \HuangYi\JsonRpc\Foundation\Request $request
+     * @param \HuangYi\JsonRpc\Server\Request $request
      * @return \HuangYi\JsonRpc\Routing\Route
      */
     protected function findRoute($request)
@@ -318,7 +318,7 @@ class Router
      * Run the given route within a Stack "onion" instance.
      *
      * @param  \HuangYi\JsonRpc\Routing\Route $route
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
+     * @param  \HuangYi\JsonRpc\Server\Request $request
      * @return mixed
      */
     protected function runRouteWithinStack(Route $route, Request $request)
@@ -333,7 +333,7 @@ class Router
             ->through($middleware)
             ->then(function ($request) use ($route) {
                 return $this->prepareResponse(
-                    $request, $route->run($request->getParams())
+                    $request, $route->run((array) $request->getParams())
                 );
             });
     }
@@ -367,9 +367,9 @@ class Router
     /**
      * Create a response instance from the given value.
      *
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
+     * @param  \HuangYi\JsonRpc\Server\Request $request
      * @param  mixed $response
-     * @return \HuangYi\JsonRpc\Foundation\Response
+     * @return \HuangYi\JsonRpc\Server\Response
      */
     public function prepareResponse($request, $response)
     {
@@ -511,7 +511,7 @@ class Router
     /**
      * Get the request currently being dispatched.
      *
-     * @return \HuangYi\JsonRpc\Foundation\Request
+     * @return \HuangYi\JsonRpc\Server\Request
      */
     public function getCurrentRequest()
     {

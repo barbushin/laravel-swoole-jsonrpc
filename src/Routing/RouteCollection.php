@@ -12,7 +12,7 @@
 namespace HuangYi\JsonRpc\Routing;
 
 use HuangYi\JsonRpc\Exceptions\MethodNotFoundException;
-use HuangYi\JsonRpc\Foundation\Request;
+use HuangYi\JsonRpc\Server\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -90,7 +90,7 @@ class RouteCollection extends Collection
     /**
      * Find the first route matching a given request.
      *
-     * @param  \HuangYi\JsonRpc\Foundation\Request $request
+     * @param  \HuangYi\JsonRpc\Server\Request $request
      * @return \HuangYi\JsonRpc\Routing\Route
      *
      * @throws \HuangYi\JsonRpc\Exceptions\MethodNotFoundException

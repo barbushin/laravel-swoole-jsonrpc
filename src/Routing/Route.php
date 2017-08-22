@@ -14,7 +14,7 @@ namespace HuangYi\JsonRpc\Routing;
 use Illuminate\Support\Arr;
 use ReflectionFunction;
 use Illuminate\Support\Str;
-use HuangYi\JsonRpc\Foundation\Request;
+use HuangYi\JsonRpc\Server\Request;
 use Illuminate\Routing\RouteDependencyResolverTrait;
 
 class Route
@@ -191,7 +191,7 @@ class Route
     /**
      * Determine if the route matches given request.
      *
-     * @param \HuangYi\JsonRpc\Foundation\Request $request
+     * @param \HuangYi\JsonRpc\Server\Request $request
      * @return bool
      */
     public function match(Request $request)
