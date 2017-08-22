@@ -11,6 +11,8 @@
 
 return [
 
+    'debug' => env('JSONRPC_DEBUG', false),
+
     /*
     |--------------------------------------------------------------------------
     | JSON-RPC server configurations.

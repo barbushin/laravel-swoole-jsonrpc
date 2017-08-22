@@ -119,7 +119,7 @@ class Connection
      */
     public function send($content)
     {
-        if ($this->container['config']['app.debug']) {
+        if ($this->container['config']['jsonrpc.debug']) {
             Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
         }
 
@@ -135,7 +135,7 @@ class Connection
     {
         $response = $this->client->recv();
 
-        if ($this->container['config']['app.debug']) {
+        if ($this->container['config']['jsonrpc.debug']) {
             Log::debug(sprintf('Received response \'%s\'', $response));
         }
 

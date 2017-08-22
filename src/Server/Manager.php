@@ -163,7 +163,7 @@ class Manager
      */
     public function onReceive($server, $connectionId, $reactorId, $payload)
     {
-        if ($this->container['config']['app.debug']) {
+        if ($this->container['config']['jsonrpc.debug']) {
             $connectionInfo = $server->connection_info($connectionId);
             Log::debug(sprintf('Received request from [%s] with \'%s\'', $connectionInfo['remote_ip'], $payload));
         }
