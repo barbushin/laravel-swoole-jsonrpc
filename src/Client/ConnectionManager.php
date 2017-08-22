@@ -67,7 +67,7 @@ class ConnectionManager
 
         $connection = new Connection($config['host'], $config['port']);
 
-        return $connection->;
+        return $connection->setContainer($this->container);
     }
 
     /**
