@@ -164,7 +164,8 @@ class Manager
     public function onReceive($server, $connectionId, $reactorId, $payload)
     {
         if ($this->container['config']['app.debug']) {
-            Log::debug(sprintf('Received request from [%s] with [%s]', $server->connection_info['remote_ip'], $payload));
+            $connectionInfo = $server->connection_info($connectionId);
+            Log::debug(sprintf('Received request from [%s] with [%s]', $connectionInfo['remote_ip'], $payload));
         }
 
         $kernel = $this->container->make(KernelContract::class);
