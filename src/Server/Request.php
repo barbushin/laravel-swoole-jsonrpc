@@ -11,6 +11,7 @@
 
 namespace HuangYi\JsonRpc\Server;
 
+use Closure;
 use HuangYi\JsonRpc\Exceptions\InvalidRequestException;
 use HuangYi\JsonRpc\Exceptions\ParseErrorException;
 use HuangYi\JsonRpc\Routing\Route;
@@ -65,6 +66,13 @@ class Request
      * @var \HuangYi\JsonRpc\Routing\Route
      */
     protected $route;
+
+    /**
+     * The route resolver callback.
+     *
+     * @var \Closure
+     */
+    protected $routeResolver;
 
     /**
      * Makes JSON-RPC request.
@@ -180,6 +188,41 @@ class Request
         $this->route = $route;
 
         return $this;
+    }
+
+    /**
+     * Get the route handling the request.
+     *
+     * @return \Illuminate\Routing\Route
+     */
+    public function route()
+    {
+        return call_user_func($this->getRouteResolver());
+    }
+
+    /**
+     * Set the route resolver callback.
+     *
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function setRouteResolver(Closure $callback)
+    {
+        $this->routeResolver = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Get the route resolver callback.
+     *
+     * @return \Closure
+     */
+    public function getRouteResolver()
+    {
+        return $this->routeResolver ?: function () {
+            //
+        };
     }
 
     /**
