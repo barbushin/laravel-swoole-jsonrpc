@@ -14,14 +14,14 @@ namespace HuangYi\JsonRpc\Contracts;
 interface KernelContract
 {
     /**
-     * @param \HuangYi\JsonRpc\Foundation\Request $request
-     * @return \HuangYi\JsonRpc\Foundation\Response
+     * @param \HuangYi\JsonRpc\Server\Request $request
+     * @return \HuangYi\JsonRpc\Server\Response
      */
     public function handle($request);
 
     /**
-     * @param \HuangYi\JsonRpc\Foundation\Request $request
-     * @param \HuangYi\JsonRpc\Foundation\Response $response
+     * @param \HuangYi\JsonRpc\Server\Request $request
+     * @param \HuangYi\JsonRpc\Server\Response $response
      */
     public function terminate($request, $response);
 }
