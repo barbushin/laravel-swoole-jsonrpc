@@ -11,12 +11,9 @@
 
 namespace HuangYi\JsonRpc;
 
-use HuangYi\JsonRpc\Commands\JsonRpcCommand;
-use HuangYi\JsonRpc\Foundation\Server;
-use HuangYi\JsonRpc\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
-class JsonRpcServiceProvider extends ServiceProvider
+abstract class JsonRpcServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -33,9 +30,6 @@ class JsonRpcServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfig();
-        $this->registerRouter();
-        $this->registerServer();
-        $this->registerCommands();
     }
 
     /**
@@ -56,35 +50,5 @@ class JsonRpcServiceProvider extends ServiceProvider
     protected function mergeConfig()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/jsonrpc.php', 'jsonrpc');
-    }
-
-    /**
-     * Register router.
-     */
-    protected function registerRouter()
-    {
-        $this->app->singleton('swoole.jsonrpc.router', function ($app) {
-            return new Router($app);
-        });
-    }
-
-    /**
-     * Register server.
-     */
-    protected function registerServer()
-    {
-        $this->app->singleton('swoole.jsonrpc', function ($app) {
-            return new Server($app);
-        });
-    }
-
-    /**
-     * Register commands.
-     */
-    protected function registerCommands()
-    {
-        $this->commands([
-            JsonRpcCommand::class,
-        ]);
     }
 }
