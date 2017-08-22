@@ -46,7 +46,8 @@ class Request
     {
         $this->method = $method;
         $this->params = $params;
-        $this->id = $this->setId($id);
+
+        $this->setId($id);
     }
 
     /**
