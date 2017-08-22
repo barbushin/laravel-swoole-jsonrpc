@@ -40,9 +40,9 @@ class Manager
      * @var array
      */
     protected $events = [
-        'start', 'shutDown', 'workerStart', 'workerStop', 'timer', 'connect',
-        'receive', 'packet', 'close', 'bufferFull', 'bufferEmpty', 'task',
-        'finish', 'pipeMessage', 'workerError', 'managerStart', 'managerStop',
+        'start', 'shutDown', 'workerStart', 'workerStop', 'connect', 'receive',
+        'packet', 'close', 'bufferFull', 'bufferEmpty', 'task', 'finish',
+        'pipeMessage', 'workerError', 'managerStart', 'managerStop',
     ];
 
     /**
