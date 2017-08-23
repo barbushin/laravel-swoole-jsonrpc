@@ -12,6 +12,7 @@
 namespace HuangYi\JsonRpc\Exceptions;
 
 use Exception;
+use HuangYi\JsonRpc\Server\Request;
 use HuangYi\JsonRpc\Server\Response;
 use Psr\Log\LoggerInterface;
 use Illuminate\Contracts\Container\Container;
@@ -115,7 +116,11 @@ class Handler implements ExceptionHandlerContract, JsonRpcExceptionHandlerContra
 
         $response->setError($code, $message, $data);
 
-        return $response->prepare($request);
+        if ($request instanceof Request) {
+            $response->prepare($request);
+        }
+
+        return $response;
     }
 
     /**
