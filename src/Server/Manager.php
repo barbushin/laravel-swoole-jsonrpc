@@ -190,6 +190,10 @@ class Manager
 
         $response->send($server, $connectionId);
 
+        if ($this->container['config']['jsonrpc.debug']) {
+            Log::debug(sprintf('Send response with \'%s\'', $response->toJson()));
+        }
+
         $kernel->terminate($request, $response);
     }
 
