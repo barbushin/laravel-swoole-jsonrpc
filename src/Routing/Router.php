@@ -180,6 +180,10 @@ class Router
      */
     protected function createRoute($method, $action)
     {
+        if (is_null($action) || (is_array($action) && ! isset($action['uses']))) {
+            $action = ['uses' => $method];
+        }
+
         if ($this->actionReferencesController($action)) {
             $action = $this->convertToControllerAction($action);
         }
