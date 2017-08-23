@@ -178,13 +178,13 @@ class Manager
 
         } catch (ResponseException $exception) {
 
-            $response = $this->container[ExceptionHandlerContract::class]->render($request, $exception);
+            $response = $this->container[ExceptionHandlerContract::class]->render(null, $exception);
 
         } catch (Exception $exception) {
 
             $this->container[ExceptionHandlerContract::class]->report($exception);
 
-            $response = $this->container[ExceptionHandlerContract::class]->render($request, new InternalErrorException);
+            $response = $this->container[ExceptionHandlerContract::class]->render(null, new InternalErrorException);
 
         }
 
