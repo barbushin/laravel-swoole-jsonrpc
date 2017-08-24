@@ -25,5 +25,13 @@
         "psr-4": {
             "HuangYi\\JsonRpc\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HuangYi\\JsonRpc\\ClientServiceProvider",
+                "HuangYi\\JsonRpc\\ServerServiceProvider"
+            ]
+        }
     }
 }
