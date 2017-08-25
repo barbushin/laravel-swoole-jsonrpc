@@ -13,6 +13,8 @@ return [
 
     'debug' => env('JSONRPC_DEBUG', false),
 
+    'white_list' => env('JSONRPC_WHITE_LIST', base_path('.whitelist')),
+
     /*
     |--------------------------------------------------------------------------
     | JSON-RPC server configurations.
