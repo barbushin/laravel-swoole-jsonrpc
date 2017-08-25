@@ -86,6 +86,10 @@ class WhiteList
             return true;
         }
 
+        if (in_array('0.0.0.0', $this->whiteList, true)) {
+            return true;
+        }
+
         return in_array($ip, $this->whiteList, true);
     }
 
