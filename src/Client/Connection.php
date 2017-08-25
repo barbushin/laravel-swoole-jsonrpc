@@ -119,7 +119,7 @@ class Connection
      */
     public function send($content)
     {
-        if ($this->container['config']['jsonrpc.debug']) {
+        if ($this->$this->isDebug()) {
             Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
         }
 
@@ -129,17 +129,17 @@ class Connection
     /**
      * Receive response.
      *
-     * @return string
+     * @return \HuangYi\JsonRpc\Client\Response
      */
     public function receive()
     {
-        $response = $this->client->recv();
+        $payload = $this->client->recv();
 
-        if ($this->container['config']['jsonrpc.debug']) {
-            Log::debug(sprintf('Received response \'%s\'', $response));
+        if ($this->isDebug()) {
+            Log::debug(sprintf('Received response \'%s\'', $payload));
         }
 
-        return $response;
+        return Response::make($payload);
     }
 
     /**
@@ -163,5 +163,13 @@ class Connection
         $this->container = $container;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isDebug()
+    {
+        return $this->container['config']['jsonrpc.debug'];
     }
 }
