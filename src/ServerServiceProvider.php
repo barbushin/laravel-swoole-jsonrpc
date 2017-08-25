@@ -5,6 +5,7 @@ namespace HuangYi\JsonRpc;
 use HuangYi\JsonRpc\Commands\JsonRpcCommand;
 use HuangYi\JsonRpc\Server\Manager;
 use HuangYi\JsonRpc\Routing\Router;
+use HuangYi\JsonRpc\Server\WhiteList;
 
 class ServerServiceProvider extends JsonRpcServiceProvider
 {
@@ -17,9 +18,22 @@ class ServerServiceProvider extends JsonRpcServiceProvider
     {
         parent::register();
 
+        $this->registerWhiteList();
         $this->registerRouter();
         $this->registerServer();
         $this->registerCommands();
+    }
+
+    /**
+     * Register white list.
+     */
+    protected function registerWhiteList()
+    {
+        $this->app->singleton('swoole.jsonrpc.whitelist', function ($app) {
+            return new WhiteList($app);
+        });
+
+        $this->app->alias('swoole.jsonrpc.whitelist', WhiteList::class);
     }
 
     /**
