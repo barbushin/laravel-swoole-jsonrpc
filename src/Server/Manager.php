@@ -163,14 +163,17 @@ class Manager
      */
     public function onReceive($server, $connectionId, $reactorId, $payload)
     {
-        if ($this->container['config']['jsonrpc.debug']) {
-            $connectionInfo = $server->connection_info($connectionId);
-            Log::debug(sprintf('Received request from [%s] with \'%s\'', $connectionInfo['remote_ip'], $payload));
+        $ip = $this->getRemoteIp($server, $connectionId);
+
+        if ($this->isDebug()) {
+            Log::debug(sprintf('Received request from [%s] with \'%s\'', $ip, $payload));
         }
 
         $kernel = $this->container->make(KernelContract::class);
 
         try {
+
+            $this->ensureIpInTheWhiteList($ip);
 
             $response = $kernel->handle(
                 $request = Request::make($payload)
@@ -190,7 +193,7 @@ class Manager
 
         $response->send($server, $connectionId);
 
-        if ($this->container['config']['jsonrpc.debug']) {
+        if ($this->isDebug()) {
             Log::debug(sprintf('Send response with \'%s\'', $response->toJson()));
         }
 
@@ -263,5 +266,39 @@ class Manager
         $name = sprintf('%s: %s for %s', $serverName, $process, $appName);
 
         swoole_set_process_name($name);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isDebug()
+    {
+        return $this->container['config']['jsonrpc.debug'];
+    }
+
+    /**
+     * Get remote ip.
+     *
+     * @param \Swoole\Server $server
+     * @param int $connectionId
+     * @return string
+     */
+    protected function getRemoteIp($server, $connectionId)
+    {
+        $connectionInfo = $server->connection_info($connectionId);
+
+        return $connectionInfo['remote_ip'];
+    }
+
+    /**
+     * @param string $ip
+     */
+    protected function ensureIpInTheWhiteList($ip)
+    {
+        $allowed = $this->container['swoole.jsonrpc.whitelist']->check($ip);
+
+        if (! $allowed) {
+            throw new InternalErrorException('Forbidden');
+        }
     }
 }
