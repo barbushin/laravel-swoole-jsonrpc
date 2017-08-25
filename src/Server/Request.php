@@ -236,7 +236,7 @@ class Request
     {
         $array = json_decode($payload, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || ! is_array($array)) {
             throw new ParseErrorException;
         }
 
