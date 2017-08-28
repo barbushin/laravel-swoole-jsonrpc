@@ -383,8 +383,6 @@ class Router
 
             if ($result instanceof Arrayable) {
                 $result = $result->toArray();
-            } elseif (! is_scalar($result) && ! is_array($result)) {
-                $result = (string) $result;
             }
 
             $response->setResult($result);
