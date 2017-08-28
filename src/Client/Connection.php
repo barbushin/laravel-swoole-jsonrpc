@@ -119,7 +119,7 @@ class Connection
      */
     public function send($content)
     {
-        if ($this->$this->isDebug()) {
+        if ($this->isDebug()) {
             Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
         }
 
