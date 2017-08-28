@@ -87,7 +87,7 @@ class Connection
      * @param string $method
      * @param array|null $params
      * @param mixed $id
-     * @return string
+     * @return \HuangYi\JsonRpc\Client\Response
      */
     public function request($method, array $params = null, $id = null)
     {
