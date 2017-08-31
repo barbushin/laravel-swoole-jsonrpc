@@ -39,19 +39,27 @@ class Connection
     protected $container;
 
     /**
-     * JsonRpcClient constructor.
+     * @var int
+     */
+    public $timer;
+
+    /**
+     * Connection constructor.
      *
+     * @param \Illuminate\Contracts\Container\Container $container
      * @param string $host
      * @param string $port
      * @throws \HuangYi\JsonRpc\Exceptions\ConnectionException
      */
-    public function __construct($host, $port)
+    public function __construct(Container $container, $host, $port)
     {
+        $this->container = $container;
         $this->host = $host;
         $this->port = $port;
 
         $this->createSwooleClient();
         $this->connect();
+        $this->registerListeners();
     }
 
     /**
@@ -85,19 +93,23 @@ class Connection
     }
 
     /**
-     * Reconnect.
+     * Register listeners.
      */
-    public function reconnect()
+    protected function registerListeners()
     {
-        $this->connect();
+        $this->client->onClose(function () {
+            $this->clearTimer();
+        });
     }
 
     /**
      * @return bool
      */
-    public function isConnected()
+    public function ping()
     {
-        return $this->client->isConnected();
+        $this->client->send('ping');
+
+        return $this->client->recv() === 'pong';
     }
 
     /**
@@ -174,14 +186,21 @@ class Connection
     }
 
     /**
-     * @param \Illuminate\Contracts\Container\Container $container
-     * @return $this
+     * Clear timer.
      */
-    public function setContainer(Container $container)
+    public function clearTimer()
     {
-        $this->container = $container;
+        if ($this->timer) {
+            swoole_timer_clear($this->timer);
+        }
+    }
 
-        return $this;
+    /**
+     * @return bool
+     */
+    protected function autoConnect()
+    {
+        return $this->container['config']['jsonrpc.client.auto_reconnect'];
     }
 
     /**

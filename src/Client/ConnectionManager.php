@@ -42,18 +42,15 @@ class ConnectionManager
      * Get a connection instance.
      *
      * @param string $name
+     * @param bool $reconnect
      * @return \HuangYi\JsonRpc\Client\Connection
      */
-    public function connection($name = null)
+    public function connection($name = null, $reconnect = false)
     {
         $name = $name ?: $this->getDefaultConnection();
 
-        if (! isset($this->connections[$name])) {
+        if ($reconnect || ! isset($this->connections[$name])) {
             $this->connections[$name] = $this->createConnection($name);
-        }
-
-        if (! $this->connections[$name]->isConnected()) {
-            $this->connections[$name]->reconnect();
         }
 
         return $this->connections[$name];
@@ -69,9 +66,31 @@ class ConnectionManager
     {
         $config = $this->configuration($name);
 
-        $connection = new Connection($config['host'], $config['port']);
+        $connection = new Connection($this->container, $config['host'], $config['port']);
 
-        return $connection->setContainer($this->container);
+        $this->registerAutoReconnect($name, $connection);
+
+        return $connection;
+    }
+
+    /**
+     * Register auto reconnect.
+     *
+     * @param string $name
+     * @param \HuangYi\JsonRpc\Client\Connection $connection
+     */
+    protected function registerAutoReconnect($name, Connection $connection)
+    {
+        if ($this->autoConnect()) {
+            $tick = $this->container['config']['jsonrpc.client.timer_tick'];
+
+            $connection->timer = swoole_timer_tick($tick, function () use ($name, $connection) {
+                if (! $connection->ping()) {
+                    $connection->disconnect();
+                    $this->connection($name, true);
+                }
+            });
+        }
     }
 
     /**
@@ -79,7 +98,6 @@ class ConnectionManager
      *
      * @param  string  $name
      * @return array
-     *
      * @throws \InvalidArgumentException
      */
     protected function configuration($name)
@@ -132,10 +150,14 @@ class ConnectionManager
 
         $this->disconnect($name);
 
-        if (! isset($this->connections[$name])) {
-            return $this->connection($name);
-        }
+        return $this->connection($name, true);
+    }
 
-        return $this->connections[$name]->connect();
+    /**
+     * @return bool
+     */
+    protected function autoConnect()
+    {
+        return $this->container['config']['jsonrpc.client.auto_reconnect'];
     }
 }

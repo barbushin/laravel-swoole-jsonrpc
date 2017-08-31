@@ -160,6 +160,7 @@ class Manager
      * @param int $connectionId
      * @param int $reactorId
      * @param string $payload
+     * @return bool
      */
     public function onReceive($server, $connectionId, $reactorId, $payload)
     {
@@ -167,6 +168,10 @@ class Manager
 
         if ($this->isDebug()) {
             Log::debug(sprintf('Received request from [%s] with \'%s\'', $ip, $payload));
+        }
+
+        if ($this->isPing($payload)) {
+            return $this->pong($server, $connectionId);
         }
 
         $kernel = $this->container->make(KernelContract::class);
@@ -300,5 +305,24 @@ class Manager
         if (! $allowed) {
             throw new InternalErrorException('Forbidden');
         }
+    }
+
+    /**
+     * @param string $payload
+     * @return bool
+     */
+    protected function isPing($payload)
+    {
+        return strtolower($payload) === 'ping';
+    }
+
+    /**
+     * @param \Swoole\Server $server
+     * @param int $connectionId
+     * @return bool
+     */
+    protected function pong($server, $connectionId)
+    {
+        return $server->send($connectionId, 'pong');
     }
 }
