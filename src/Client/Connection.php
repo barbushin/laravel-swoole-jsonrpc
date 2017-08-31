@@ -51,7 +51,7 @@ class Connection
         $this->port = $port;
 
         $this->createSwooleClient();
-        $this->connect($host, $port);
+        $this->connect();
     }
 
     /**
@@ -65,20 +65,39 @@ class Connection
     /**
      * Connect.
      *
-     * @param string $host
-     * @param string $port
      * @return $this
      * @throws \HuangYi\JsonRpc\Exceptions\ConnectionException
      */
-    public function connect($host, $port)
+    public function connect()
     {
-        if (! $this->client->connect($host, $port, -1)) {
+        if (! $this->client->connect($this->host, $this->port, -1)) {
             throw new ConnectionException(
-                sprintf('Connect JSON-RPC Server [%s:%s] failed. Error code: %s.', $host, $port, $this->client->errCode)
+                sprintf(
+                    'Connect JSON-RPC Server [%s:%s] failed. Error code: %s.',
+                    $this->host,
+                    $this->port,
+                    $this->client->errCode
+                )
             );
         }
 
         return $this;
+    }
+
+    /**
+     * Reconnect.
+     */
+    public function reconnect()
+    {
+        $this->connect();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConnected()
+    {
+        return $this->client->isConnected();
     }
 
     /**

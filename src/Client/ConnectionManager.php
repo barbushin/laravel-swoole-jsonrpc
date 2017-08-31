@@ -52,6 +52,10 @@ class ConnectionManager
             $this->connections[$name] = $this->createConnection($name);
         }
 
+        if (! $this->connections[$name]->isConnected()) {
+            $this->connections[$name]->reconnect();
+        }
+
         return $this->connections[$name];
     }
 
