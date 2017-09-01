@@ -68,29 +68,7 @@ class ConnectionManager
 
         $connection = new Connection($this->container, $name, $config['host'], $config['port']);
 
-        $this->registerAutoReconnect($name, $connection);
-
         return $connection;
-    }
-
-    /**
-     * Register auto reconnect.
-     *
-     * @param string $name
-     * @param \HuangYi\JsonRpc\Client\Connection $connection
-     */
-    protected function registerAutoReconnect($name, Connection $connection)
-    {
-        if ($this->autoConnect()) {
-            $tick = $this->container['config']['jsonrpc.client.timer_tick'];
-
-            $connection->timer = swoole_timer_tick($tick, function () use ($name, $connection) {
-                if (! $connection->ping()) {
-                    $connection->disconnect();
-                    $this->connection($name, true);
-                }
-            });
-        }
     }
 
     /**

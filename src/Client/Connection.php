@@ -44,11 +44,6 @@ class Connection
     protected $container;
 
     /**
-     * @var int
-     */
-    public $timer;
-
-    /**
      * Connection constructor.
      *
      * @param \Illuminate\Contracts\Container\Container $container
@@ -191,19 +186,7 @@ class Connection
     {
         $this->client->close();
 
-        $this->clearTimer();
-
         return $this;
-    }
-
-    /**
-     * Clear timer.
-     */
-    public function clearTimer()
-    {
-        if ($this->timer) {
-            swoole_timer_clear($this->timer);
-        }
     }
 
     /**

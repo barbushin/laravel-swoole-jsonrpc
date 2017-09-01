@@ -57,10 +57,6 @@ return [
 
         'default' => 'server',
 
-        'auto_reconnect' => env('JSONRPC_CLIENT_AUTO_RECONNECT', false),
-
-        'timer_tick' => env('JSONRPC_CLIENT_TIMER_TICK', 60000),
-
         'connections' => [
 
             'server' => [
