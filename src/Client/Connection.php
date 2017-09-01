@@ -59,7 +59,6 @@ class Connection
 
         $this->createSwooleClient();
         $this->connect();
-        $this->registerListeners();
     }
 
     /**
@@ -90,16 +89,6 @@ class Connection
         }
 
         return $this;
-    }
-
-    /**
-     * Register listeners.
-     */
-    protected function registerListeners()
-    {
-        $this->client->on('close', function () {
-            $this->clearTimer();
-        });
     }
 
     /**
@@ -181,6 +170,8 @@ class Connection
     public function disconnect()
     {
         $this->client->close();
+
+        $this->clearTimer();
 
         return $this;
     }
