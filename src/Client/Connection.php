@@ -107,9 +107,9 @@ class Connection
      */
     public function ping()
     {
-        $this->client->send('ping');
+        $this->send('ping');
 
-        return $this->client->recv() === 'pong';
+        return $this->receive() === 'pong';
     }
 
     /**
@@ -126,7 +126,7 @@ class Connection
 
         $this->send($request->toJson());
 
-        return $this->receive();
+        return Response::make($this->receive());
     }
 
     /**
@@ -170,7 +170,7 @@ class Connection
             Log::debug(sprintf('Received response \'%s\'', $payload));
         }
 
-        return Response::make($payload);
+        return $payload;
     }
 
     /**
