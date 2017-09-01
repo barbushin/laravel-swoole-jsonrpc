@@ -38,6 +38,8 @@ return [
 
             'daemonize' => env('JSONRPC_SERVER_OPTIONS_DAEMONIZE', 1),
 
+            'worker_num' => env('JSONRPC_SERVER_OPTIONS_WORKER_NUM', 1),
+
         ],
 
     ],
