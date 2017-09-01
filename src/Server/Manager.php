@@ -166,43 +166,14 @@ class Manager
     {
         $ip = $this->getRemoteIp($server, $connectionId);
 
-        if ($this->isDebug()) {
-            Log::debug(sprintf('Received request from [%s] with \'%s\'', $ip, $payload));
-        }
+        $this->logOnReceive($ip, $payload);
 
+        // if the client send a "ping", we will respond a "pong".
         if ($this->isPing($payload)) {
             return $this->pong($server, $connectionId);
         }
 
-        $kernel = $this->container->make(KernelContract::class);
-
-        try {
-
-            $this->ensureIpInTheWhiteList($ip);
-
-            $response = $kernel->handle(
-                $request = Request::make($payload)
-            );
-
-        } catch (ResponseException $exception) {
-
-            $response = $this->container[ExceptionHandlerContract::class]->render(null, $exception);
-
-        } catch (Exception $exception) {
-
-            $this->container[ExceptionHandlerContract::class]->report($exception);
-
-            $response = $this->container[ExceptionHandlerContract::class]->render(null, new InternalErrorException);
-
-        }
-
-        $response->send($server, $connectionId);
-
-        if ($this->isDebug()) {
-            Log::debug(sprintf('Send response with \'%s\'', $response->toJson()));
-        }
-
-        $kernel->terminate($request, $response);
+        $this->runApplication($server, $connectionId, $payload, $ip);
     }
 
     /**
@@ -213,6 +184,66 @@ class Manager
         $this->removePidFile();
 
         $this->container['events']->fire('jsonrpc.showdown', func_get_args());
+    }
+
+    /**
+     * Log client ip and payload.
+     *
+     * @param string $ip
+     * @param string $payload
+     */
+    protected function logOnReceive($ip, $payload)
+    {
+        if ($this->isDebug()) {
+            Log::debug(sprintf('Received request from [%s] with \'%s\'', $ip, $payload));
+        }
+    }
+
+    /**
+     * Run application.
+     *
+     * @param \Swoole\Server $server
+     * @param int $connectionId
+     * @param string $payload
+     * @param string $ip
+     */
+    protected function runApplication($server, $connectionId, $payload, $ip)
+    {
+        $kernel = $this->container->make(KernelContract::class);
+
+        try {
+            $this->ensureIpInTheWhiteList($ip);
+
+            $response = $kernel->handle(
+                $request = Request::make($payload)
+            );
+        } catch (ResponseException $exception) {
+
+            $response = $this->container[ExceptionHandlerContract::class]->render(null, $exception);
+
+        } catch (Exception $exception) {
+            $this->container[ExceptionHandlerContract::class]->report($exception);
+
+            $response = $this->container[ExceptionHandlerContract::class]->render(null, new InternalErrorException);
+        }
+
+        $response->send($server, $connectionId);
+
+        $this->logOnRespond($response);
+
+        $kernel->terminate($request, $response);
+    }
+
+    /**
+     * Log response.
+     *
+     * @param \HuangYi\JsonRpc\Server\Response $response
+     */
+    protected function logOnRespond(Response $response)
+    {
+        if ($this->isDebug()) {
+            Log::debug(sprintf('Send response with \'%s\'', $response->toJson()));
+        }
     }
 
     /**
