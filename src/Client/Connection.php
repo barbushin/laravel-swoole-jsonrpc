@@ -151,6 +151,7 @@ class Connection
             Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
         }
 
+        // if caught an ErrorException, it means connection has been broken.
         try {
             $this->client->send($content);
         } catch (\ErrorException $exception) {
@@ -171,6 +172,11 @@ class Connection
 
         if ($this->isDebug()) {
             Log::debug(sprintf('Received response \'%s\'', $payload));
+        }
+
+        // if received an empty response, we will try to reconnect to the server.
+        if (empty($payload)) {
+            $this->container['swoole.jsonrpc.client']->connection($this->name, true);
         }
 
         return $payload;
