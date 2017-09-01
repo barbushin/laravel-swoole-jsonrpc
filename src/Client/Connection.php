@@ -97,7 +97,7 @@ class Connection
      */
     protected function registerListeners()
     {
-        $this->client->onClose(function () {
+        $this->client->on('close', function () {
             $this->clearTimer();
         });
     }
