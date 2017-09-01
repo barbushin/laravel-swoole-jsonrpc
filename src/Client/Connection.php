@@ -21,6 +21,11 @@ class Connection
     /**
      * @var string
      */
+    protected $name;
+
+    /**
+     * @var string
+     */
     protected $host;
 
     /**
@@ -47,13 +52,15 @@ class Connection
      * Connection constructor.
      *
      * @param \Illuminate\Contracts\Container\Container $container
+     * @param string $name
      * @param string $host
      * @param string $port
      * @throws \HuangYi\JsonRpc\Exceptions\ConnectionException
      */
-    public function __construct(Container $container, $host, $port)
+    public function __construct(Container $container, $name, $host, $port)
     {
         $this->container = $container;
+        $this->name = $name;
         $this->host = $host;
         $this->port = $port;
 
@@ -134,8 +141,9 @@ class Connection
     /**
      * Send request.
      *
-     * @param $content
+     * @param string $content
      * @return string
+     * @throws \ErrorException
      */
     public function send($content)
     {
@@ -143,7 +151,13 @@ class Connection
             Log::debug(sprintf('Send request to [%s:%s] with \'%s\'', $this->host, $this->port, $content));
         }
 
-        $this->client->send($content);
+        try {
+            $this->client->send($content);
+        } catch (\ErrorException $exception) {
+            $this->container['swoole.jsonrpc.client']->connection($this->name, true);
+
+            throw $exception;
+        }
     }
 
     /**

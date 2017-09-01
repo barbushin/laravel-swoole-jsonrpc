@@ -66,7 +66,7 @@ class ConnectionManager
     {
         $config = $this->configuration($name);
 
-        $connection = new Connection($this->container, $config['host'], $config['port']);
+        $connection = new Connection($this->container, $name, $config['host'], $config['port']);
 
         $this->registerAutoReconnect($name, $connection);
 
