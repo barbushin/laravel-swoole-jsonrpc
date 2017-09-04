@@ -5,6 +5,7 @@ namespace HuangYi\JsonRpc;
 use HuangYi\JsonRpc\Commands\JsonRpcCommand;
 use HuangYi\JsonRpc\Server\Manager;
 use HuangYi\JsonRpc\Routing\Router;
+use HuangYi\JsonRpc\Server\ResponseFactory;
 use HuangYi\JsonRpc\Server\WhiteList;
 
 class ServerServiceProvider extends JsonRpcServiceProvider
@@ -53,11 +54,17 @@ class ServerServiceProvider extends JsonRpcServiceProvider
      */
     protected function registerServer()
     {
+        // jsonrpc server
         $this->app->singleton('swoole.jsonrpc', function ($app) {
             return new Manager($app);
         });
 
         $this->app->alias('swoole.jsonrpc', Manager::class);
+
+        // jsonrpc response
+        $this->app->singleton('swoole.jsonrpc.response', function () {
+            return new ResponseFactory;
+        });
     }
 
     /**
