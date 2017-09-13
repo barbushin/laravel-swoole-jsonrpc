@@ -12,6 +12,8 @@
 namespace HuangYi\JsonRpc\Server;
 
 use Exception;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 use HuangYi\JsonRpc\Contracts\ExceptionHandlerContract;
 use HuangYi\JsonRpc\Contracts\KernelContract;
 use HuangYi\JsonRpc\Routing\Router;
@@ -73,6 +75,10 @@ class Kernel implements KernelContract
             $response = $this->router->dispatch($request);
         } catch (Exception $e) {
             $this->reportException($e);
+
+            $response = $this->renderException($request, $e);
+        } catch (Throwable $e) {
+            $this->reportException($e = new FatalThrowableError($e));
 
             $response = $this->renderException($request, $e);
         }
