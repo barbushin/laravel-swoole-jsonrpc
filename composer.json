@@ -10,16 +10,16 @@
         }
     ],
     "require": {
-        "illuminate/console": "~5.1",
-        "illuminate/contracts": "~5.1",
-        "illuminate/pipeline": "~5.1",
-        "illuminate/routing": "~5.1",
-        "illuminate/support": "~5.1",
+        "illuminate/console": "~5.5",
+        "illuminate/contracts": "~5.5",
+        "illuminate/pipeline": "~5.5",
+        "illuminate/routing": "~5.5",
+        "illuminate/support": "~5.5",
         "ramsey/uuid": "~3.0"
     },
     "require-dev": {
-        "laravel/framework": "~5.1",
-        "laravel/lumen-framework": "~5.1"
+        "laravel/framework": "~5.5",
+        "laravel/lumen-framework": "~5.5"
     },
     "autoload": {
         "psr-4": {
