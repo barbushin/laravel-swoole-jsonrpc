@@ -51,6 +51,29 @@ class ResponseFactory
     }
 
     /**
+     * Return a paginator.
+     *
+     * @param array|\Illuminate\Support\Collection $collection
+     * @param int $total
+     * @param \HuangYi\JsonRpc\Server\Transformable|null $transformer
+     * @return \HuangYi\JsonRpc\Server\Response
+     */
+    public function paginator($collection, $total, Transformable $transformer = null)
+    {
+        if (! is_null($transformer)) {
+            foreach ($collection as &$item) {
+                $item = $transformer->transform($item);
+            }
+        }
+
+        if ($collection instanceof Arrayable) {
+            $collection = $collection->toArray();
+        }
+
+        return (new Response)->setResult(['items' => $collection, 'total' => $total]);
+    }
+
+    /**
      * Return an invalid params error.
      *
      * @param array|null $errors
