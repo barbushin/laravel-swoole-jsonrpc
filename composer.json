@@ -1,5 +1,5 @@
 {
-    "name": "huang-yi/laravel-swoole-jsonrpc",
+    "name": "barbushin/laravel-swoole-jsonrpc",
     "description": "JSON-RPC server and client based on swoole, for laravel and lumen framework.",
     "keywords": ["jsonrpc", "json-rpc", "rpc", "json", "laravel", "lumen", "swoole", "php"],
     "license": "MIT",
